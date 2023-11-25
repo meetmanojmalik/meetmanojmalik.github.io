@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lovely & Manoj Together</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .header {
+            background-color: #5d0606;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            cursor: pointer;
+        }
+
+      .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .pagination {
+            text-align: center;
+        }
+
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .modal {
+                top: 5%;
+                left: 5%;
+                width: 90%;
+                height: 90%;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr; /* Set a single image per row */
+            }
+
+            .gallery img {
+                width: 100%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<div class="header">
+    <h1>Lovely & Manoj</h1>
+    <p>Our pre wedding moments</p>
+</div>
+
+<div class="gallery" id="gallery">
+    <!-- Images will be dynamically populated here -->
+</div>
+
+<div class="pagination">
+    <button id="prevPage">Previous Page</button>
+    <span id="pageNumbers">Page: <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+    <button id="nextPage">Next Page</button>
+    <br/><br/>
+    <!-- Add a dropdown for page selection -->
+    Go to Page:
+    <select id="pageSelect">
+        <!-- JavaScript will populate this with page options -->
+    </select>
+	<br/><br/>
+</div>
+
+<div class="modal" id="myModal">
+    <span class="close" id="close">&times;</span>
+    <img class="modal-content" id="modalImg">
+    <button id="prevImage">Previous</button>
+    <button id="nextImage">Next</button>
+    <br/><br/>
+</div>
+
+<div class="footer">
+    <a href="https://www.facebook.com/share?url=https://tinyurl.com/manojlovely" target="_blank">
+        <i class="fab fa-facebook"></i>
+    </a>
+    <a href="whatsapp://send?text=https://tinyurl.com/manojlovely" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <a href="https://twitter.com/share?url=https://tinyurl.com/manojlovely" target="_blank">
+        <i class="fab fa-twitter"></i>
+    </a>
+    <a href="https://t.me/share/url?url=https://tinyurl.com/manojlovely" target="_blank">
+        <i class="fab fa-telegram"></i>
+    </a>
+</div>
+
+<script>
+    // Define your image URLs in JSON format
+    const imageUrls = [
+       "https://ik.imagekit.io/manojlove/p1/20231022153325_IMG_6236.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153327_IMG_6237.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153339_IMG_6238.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153358_IMG_6239.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153403_IMG_6240.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153454_IMG_6241.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153500_IMG_6242.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153618_IMG_6243.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153621_IMG_6244.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153628_IMG_6245.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153634_IMG_6246.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153639_IMG_6247.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153645_IMG_6248.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022153647_IMG_6249.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154045_IMG_6250.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154048_IMG_6251.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154107_IMG_6252.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154117_IMG_6253.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154155_IMG_6254.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154202_IMG_6255.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154207_IMG_6256.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154312_IMG_6257.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154315_IMG_6258.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154325_IMG_6259.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022154327_IMG_6260.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022165357_IMG_6262.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022165424_IMG_6263.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022165430_IMG_6264.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022165455_IMG_6265.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022165502_IMG_6266.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022165646_IMG_6267.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022165722_IMG_6268.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022165947_IMG_6269.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022170138_IMG_6270.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022170139_IMG_6271.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022170151_IMG_6272.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022170204_IMG_6273.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022170207_IMG_6274.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022170337_IMG_6275.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022170343_IMG_6276.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022170357_IMG_6277.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022170419_IMG_6278.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022170423_IMG_6279.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022172647_IMG_6280.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022172725_IMG_6281.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022172727_IMG_6282.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022172812_IMG_6283.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022172813_IMG_6284.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022172830_IMG_6285.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022173336_IMG_6286.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022173445_IMG_6287.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022174214_IMG_6288.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022174235_IMG_6289.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022174315_IMG_6290.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022174316_IMG_6291.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022174848_IMG_6293.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022174855_IMG_6294.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022174900_IMG_6295.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022174902_IMG_6296.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022175134_IMG_6297.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022175138_IMG_6298.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022175143_IMG_6299.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022175145_IMG_6300.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022175150_IMG_6301.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022175754_IMG_6302.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022175926_IMG_6303.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022175955_IMG_6304.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180005_IMG_6305.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180024_IMG_6306.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180127_IMG_6307.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180131_IMG_6308.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180228_IMG_6309.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180316_IMG_6310.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180438_IMG_6311.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180441_IMG_6312.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180457_IMG_6313.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180502_IMG_6314.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180924_IMG_6315.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022180950_IMG_6316.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022181008_IMG_6317.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022181016_IMG_6318.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022181025_IMG_6319.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022181029_IMG_6320.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022181809_IMG_6321.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022181813_IMG_6322.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022181820_IMG_6323.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022182313_IMG_6324.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022182354_IMG_6325.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022202917_IMG_6329.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022202958_IMG_6330.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022202959_IMG_6331.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022203138_IMG_6335.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204148_IMG_6336.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204153_IMG_6337.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204157_IMG_6338.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204159_IMG_6339.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204201_IMG_6340.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204236_IMG_6341.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204238_IMG_6342.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204319_IMG_6343.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204353_IMG_6345.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204402_IMG_6346.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204752_IMG_6349.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204832_IMG_6350.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204834_IMG_6351.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022204838_IMG_6352.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205208_IMG_6353.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205219_IMG_6354.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205222_IMG_6355.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205223_IMG_6356.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205227_IMG_6357.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205234_IMG_6358.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205242_IMG_6359.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205246_IMG_6360.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205251_IMG_6361.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205301_IMG_6362.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205305_IMG_6363.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205315_IMG_6364.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205328_IMG_6365.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205426_IMG_6366.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205430_IMG_6367.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205437_IMG_6368.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205444_IMG_6369.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205446_IMG_6370.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205911_IMG_6372.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205921_IMG_6373.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205933_IMG_6374.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205943_IMG_6375.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022205953_IMG_6376.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210002_IMG_6377.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210422_IMG_6381.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210424_IMG_6382.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210429_IMG_6383.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210431_IMG_6384.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210650_IMG_6385.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210706_IMG_6386.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210710_IMG_6387.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210713_IMG_6388.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210724_IMG_6389.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210733_IMG_6390.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022210928_IMG_6391.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211106_IMG_6393.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211122_IMG_6394.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211124_IMG_6395.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211204_IMG_6396.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211455_IMG_6397.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211502_IMG_6398.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211506_IMG_6399.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211507_IMG_6400.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211508_IMG_6401.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211535_IMG_6402.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211539_IMG_6403.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211542_IMG_6404.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211656_IMG_6405.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211705_IMG_6406.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211723_IMG_6407.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211725_IMG_6408.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211732_IMG_6409.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211749_IMG_6410.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211851_IMG_6412.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211855_IMG_6413.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231022211901_IMG_6414.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100015_IMG_6417.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100026_IMG_6418.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100030_IMG_6419.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100040_IMG_6420.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100046_IMG_6421.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100112_IMG_6422.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100114_IMG_6423.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100121_IMG_6424.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100412_IMG_6425.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100425_IMG_6426.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100430_IMG_6427.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100442_IMG_6428.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023100456_IMG_6429.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023101406_IMG_6430.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023101416_IMG_6431.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023101422_IMG_6432.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023102030_IMG_6433.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023102037_IMG_6434.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023103856_IMG_6435.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023103902_IMG_6436.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023103921_IMG_6437.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023104618_IMG_6438.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023104624_IMG_6439.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023104724_IMG_6440.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023104758_IMG_6441.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023104812_IMG_6442.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105003_IMG_6443.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105010_IMG_6444.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105018_IMG_6445.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105025_IMG_6446.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105126_IMG_6447.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105131_IMG_6448.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105137_IMG_6449.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105149_IMG_6450.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105318_IMG_6451.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105323_IMG_6452.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105328_IMG_6453.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105659_IMG_6454.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105703_IMG_6455.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105712_IMG_6456.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105718_IMG_6457.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105723_IMG_6458.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105811_IMG_6459.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105831_IMG_6461.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105844_IMG_6462.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105849_IMG_6463.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023105856_IMG_6464.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023110411_IMG_6465.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023110419_IMG_6466.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023112847_IMG_6476.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023112903_IMG_6477.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023112924_IMG_6478.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023112937_IMG_6479.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121006_IMG_6480.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121009_IMG_6481.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121015_IMG_6482.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121040_IMG_6483.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121102_IMG_6484.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121103_IMG_6485.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121106_IMG_6486.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121110_IMG_6487.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121202_IMG_6488.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121216_IMG_6489.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121220_IMG_6490.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023121221_IMG_6491.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023122432_IMG_6492.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023122435_IMG_6493.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023122443_IMG_6494.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023122457_IMG_6495.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023122510_IMG_6496.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023122728_IMG_6497.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023122735_IMG_6498.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023122741_IMG_6499.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023123404_IMG_6502.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023123416_IMG_6503.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023123454_IMG_6504.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023123500_IMG_6505.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023123506_IMG_6506.JPG",
+"https://ik.imagekit.io/manojlove/p1/20231023123513_IMG_6507.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154355_IMG_6510.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154358_IMG_6511.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154558_IMG_6516.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154605_IMG_6517.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154606_IMG_6518.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154610_IMG_6519.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154714_IMG_6520.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154718_IMG_6521.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154726_IMG_6522.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154736_IMG_6523.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154738_IMG_6524.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154841_IMG_6525.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154850_IMG_6526.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154855_IMG_6527.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154919_IMG_6528.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154924_IMG_6529.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154928_IMG_6530.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154943_IMG_6531.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154948_IMG_6532.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023154952_IMG_6533.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023155045_IMG_6534.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023155051_IMG_6535.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023155104_IMG_6536.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023155133_IMG_6537.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023155139_IMG_6538.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171415_IMG_6540.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171418_IMG_6541.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171439_IMG_6542.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171442_IMG_6543.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171448_IMG_6544.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171657_IMG_6545.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171700_IMG_6546.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171723_IMG_6547.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171729_IMG_6548.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171739_IMG_6549.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171915_IMG_6550.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023171919_IMG_6551.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023172020_IMG_6552.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023172024_IMG_6553.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023172030_IMG_6554.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180534_IMG_6558.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180541_IMG_6559.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180553_IMG_6560.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180555_IMG_6561.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180657_IMG_6562.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180659_IMG_6563.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180702_IMG_6564.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180706_IMG_6565.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180853_IMG_6567.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180854_IMG_6568.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023180959_IMG_6571.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181020_IMG_6572.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181022_IMG_6573.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181047_IMG_6574.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181143_IMG_6575.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181152_IMG_6576.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181204_IMG_6578.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181210_IMG_6579.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181215_IMG_6580.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181225_IMG_6582.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181228_IMG_6583.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023181232_IMG_6584.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023190006_IMG_6588.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023190201_IMG_6589.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023190237_IMG_6591.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023190246_IMG_6592.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023190341_IMG_6594.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023190431_IMG_6595.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023190446_IMG_6596.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023190450_IMG_6597.JPG",
+"https://ik.imagekit.io/manojlove/p2/20231023190453_IMG_6598.JPG"
+    ];
+
+    const gallery = document.getElementById('gallery');
+    const prevPageButton = document.getElementById('prevPage');
+    const nextPageButton = document.getElementById('nextPage');
+    const currentPageElement = document.getElementById('currentPage');
+    const totalPagesElement = document.getElementById('totalPages');
+
+    const itemsPerPage = 10; // Number of images per page
+    let currentPage = 1;
+
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(imageUrls.length / itemsPerPage);
+    totalPagesElement.textContent = totalPages;
+
+    // Function to show images for the current page
+    function showImages() {
+        gallery.innerHTML = '';
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+
+        for (let i = startIndex; i < endIndex && i < imageUrls.length; i++) {
+            const img = document.createElement('img');
+            img.src = imageUrls[i];
+            img.onclick = () => openModal(i);
+            gallery.appendChild(img);
+        }
+    }
+
+    // Function to open the modal for a specific image
+    function openModal(index) {
+        const modal = document.getElementById('myModal');
+        const modalImg = document.getElementById('modalImg');
+        modal.style.display = 'block';
+        modalImg.src = imageUrls[index];
+        let currentIndex = index;
+
+        const prevImageButton = document.getElementById('prevImage');
+        const nextImageButton = document.getElementById('nextImage');
+
+        // Handle previous image button
+        prevImageButton.onclick = function () {
+            if (currentIndex > 0) {
+                currentIndex--;
+                modalImg.src = imageUrls[currentIndex];
+            }
+        };
+
+        // Handle next image button
+        nextImageButton.onclick = function () {
+            if (currentIndex < imageUrls.length - 1) {
+                currentIndex++;
+                modalImg.src = imageUrls[currentIndex];
+            }
+        };
+
+        const close = document.getElementById('close');
+        close.onclick = function () {
+            modal.style.display = 'none';
+        };
+    }
+
+    // Handle previous page button
+    prevPageButton.onclick = function () {
+        if (currentPage > 1) {
+            currentPage--;
+            currentPageElement.textContent = currentPage;
+            showImages();
+        }
+    };
+
+    // Handle next page button
+    nextPageButton.onclick = function () {
+        if (currentPage < totalPages) {
+            currentPage++;
+            currentPageElement.textContent = currentPage;
+            showImages();
+        }
+    };
+
+    // Initial display of images
+    showImages();
+	
+	
+	   // Function to populate the page dropdown
+    function populatePageDropdown() {
+        const pageSelect = document.getElementById('pageSelect');
+        pageSelect.innerHTML = ''; // Clear existing options
+
+        for (let i = 1; i <= totalPages; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            pageSelect.appendChild(option);
+        }
+    }
+
+    // Populate the dropdown initially
+    populatePageDropdown();
+
+    // Handle page selection from the dropdown
+    const pageSelect = document.getElementById('pageSelect');
+    pageSelect.addEventListener('change', function () {
+        currentPage = parseInt(pageSelect.value);
+        currentPageElement.textContent = currentPage;
+        showImages();
+    });
+	
+</script>
+</body>
+</html>

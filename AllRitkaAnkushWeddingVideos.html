@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankush & Ritika Wedding Videos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .video {
+            margin: 20px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+        }
+
+        .video img {
+            max-width: 100%;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ankush & Ritika Wedding Videos</h1>
+        <p>Join us in celebrating the beautiful moments of our wedding journey.</p>
+    </header>
+    <div class="container">
+        <!-- Loop through the videoData array and display videos -->
+        <script>
+            const videoData = [
+            {
+                url: 'https://youtu.be/cSk81IejqXY',
+                title: 'Highlights',
+                thumbnail: 'https://img.youtube.com/vi/cSk81IejqXY/0.jpg',
+            },
+			{
+                url: 'https://youtu.be/crDI_9-UJBI',
+                title: 'Ring Ceremony',
+                thumbnail: 'https://img.youtube.com/vi/crDI_9-UJBI/0.jpg',
+            },
+			
+            {
+                url: 'https://youtu.be/EmQ6atfgDcA',
+                title: 'Wedding Ceremony',
+                thumbnail: 'https://img.youtube.com/vi/EmQ6atfgDcA/0.jpg',
+            },
+			{
+                url: 'https://youtu.be/gtKEQCu1xIM',
+                title: 'Haldi Ceremony',
+                thumbnail: 'https://img.youtube.com/vi/gtKEQCu1xIM/0.jpg',
+            },
+			
+			{
+                url: 'https://youtu.be/wtqIFWQTj4Y',
+                title: 'Mehendi & Sangeet',
+                thumbnail: 'https://img.youtube.com/vi/wtqIFWQTj4Y/0.jpg',
+            },
+			{
+                url: 'https://youtu.be/v_eTv1Ltv8k',
+                title: 'Ganga Nimantaran',
+                thumbnail: 'https://img.youtube.com/vi/v_eTv1Ltv8k/0.jpg',
+            },
+            {
+                url: 'https://youtu.be/_vkKmyMHIME',
+                title: 'Wedding Day Rituals',
+                thumbnail: 'https://img.youtube.com/vi/_vkKmyMHIME/0.jpg',
+            },
+        ];
+
+            videoData.forEach((video, index) => {
+                const videoElement = document.createElement('div');
+                videoElement.className = 'video';
+                videoElement.innerHTML = `
+                    <h2>${video.title}</h2>
+                    <a href="${video.url}" target="_blank">
+                        <img src="${video.thumbnail}" alt="${video.title}">
+                    </a>
+                `;
+                document.querySelector('.container').appendChild(videoElement);
+            });
+        </script>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Wedding Videos</p>
+    </footer>
+</body>
+</html>
